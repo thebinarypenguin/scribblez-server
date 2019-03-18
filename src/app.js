@@ -1,8 +1,9 @@
-const express = require('express');
-const morgan  = require('morgan');
-const cors    = require('cors');
-const helmet  = require('helmet');
-const config  = require('./config');
+const express     = require('express');
+const morgan      = require('morgan');
+const cors        = require('cors');
+const helmet      = require('helmet');
+const config      = require('./config');
+const notesRouter = require('./notes/router');
 
 const app = express();
 
@@ -18,6 +19,8 @@ app.use((err, req, res, next) => {
 
   res.status(500).json(err);
 });
+
+app.use('/notes', notesRouter);
 
 app.get('/', (req, res) => {
   res.send('Hi There');
