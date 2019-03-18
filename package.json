@@ -1,0 +1,15 @@
+{
+  "name": "scribblez-server",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "migrate": "postgrator --config postgrator-config.js"
+  },
+  "dependencies": {
+    "dotenv": "^7.0.0",
+    "pg": "^7.9.0"
+  },
+  "devDependencies": {
+    "postgrator-cli": "^3.1.0"
+  }
+}
