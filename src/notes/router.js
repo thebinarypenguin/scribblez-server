@@ -1,101 +1,106 @@
 const express = require('express');
-const model = require('./model');
+const model   = require('./model');
 
 const router = express.Router();
 
-router
-  .route('/')
-  // .all(validateToken)
-  .get((req, res) => {
+// router.all('*', requireAuth);
 
-    model
-      .getAllNotes(req.app.get('db'))
-      .then((notes) => {
+// Get all Notes
+router.get('/', (req, res) => {
 
-        res.status(200).json(notes);
-      })
-      .catch((err) => {
+  model
+    .getAllNotes(req.app.get('db'))
+    .then((notes) => {
 
-        res.status(500).json(err);
-      });
-  })
-  .post(express.json(), (req, res) => {
+      res.status(200).json(notes);
+    })
+    .catch((err) => {
 
-    model
-      .createNote(req.app.get('db'), req.body)
-      .then((noteId) => {
+      res.status(500).json(err);
+    });
+});
 
-        // TODO location header
-        res.status(200).json(noteId);
-      })
-      .catch((err) => {
+// Create new note
+router.post('/', express.json(), (req, res) => {
 
-        // TODO 4xx error
+  model
+    .createNote(req.app.get('db'), req.body)
+    .then((noteId) => {
 
-        res.status(500).json(err);
-      });
-  });
+      // FIXME get full url
+      res.location(`/notes/${noteId}`);
+      res.status(200).json(noteId);
+    })
+    .catch((err) => {
 
+      // TODO 4xx error
 
-router
-  .route('/:noteId')
-  // .all(validateToken)
-  // .all(validateExistence)
-  .get((req, res) => {
+      res.status(500).json(err);
+    });
+});
 
-    model
-      .getNote(req.app.get('db'), req.params.noteId)
-      .then((notes) => {
+// Get existing note
+router.get('/:noteId', (req, res) => {
 
-        res.status(200).json(notes);
-      })
-      .catch((err) => {
+  model
+    .getNote(req.app.get('db'), req.params.noteId)
+    .then((notes) => {
 
-        res.status(500).json(err);
-      });
-  })
-  .put(express.json(), (req, res) => {
+      res.status(200).json(notes);
+    })
+    .catch((err) => {
 
-    model
-      .replaceNote(req.app.get('db'), req.params.noteId, req.body)
-      .then(() => {
+      res.status(500).json(err);
+    });
+});
 
-        res.status(204).json();
-      })
-      .catch((err) => {
+// Update existing note
+router.patch('/:noteId', express.json(), (req, res) => {
 
-        // TODO 4xx error
+  model
+    .updateNote(req.app.get('db'), req.params.noteId, req.body)
+    .then(() => {
 
-        res.status(500).json(err);
-      });
-  })
-  .patch(express.json(), (req, res) => {
+      res.status(204).json();
+    })
+    .catch((err) => {
 
-    model
-      .updateNote(req.app.get('db'), req.params.noteId, req.body)
-      .then(() => {
+      // TODO 4xx error
 
-        res.status(204).json();
-      })
-      .catch((err) => {
+      res.status(500).json(err);
+    });
+});
 
-        // TODO 4xx error
+// Replace exiting note
+router.put('/:noteId', express.json(), (req, res) => {
 
-        res.status(500).json(err);
-      });
-  })
-  .delete((req, res) => {
+  model
+    .replaceNote(req.app.get('db'), req.params.noteId, req.body)
+    .then(() => {
 
-    model
-      .deleteNote(req.app.get('db'), req.params.noteId)
-      .then(() => {
+      res.status(204).json();
+    })
+    .catch((err) => {
 
-        res.status(204).json();
-      })
-      .catch((err) => {
+      // TODO 4xx error
 
-        res.status(500).json(err);
-      });
-  });
+      res.status(500).json(err);
+    });
+});
+
+// Delete exiting note
+router.delete('/:noteId', (req, res) => {
+
+  model
+    .deleteNote(req.app.get('db'), req.params.noteId)
+    .then(() => {
+
+      res.status(204).json();
+    })
+    .catch((err) => {
+
+      res.status(500).json(err);
+    });
+});
 
 module.exports = router;
