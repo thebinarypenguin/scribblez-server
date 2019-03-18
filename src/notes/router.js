@@ -28,12 +28,12 @@ router.post('/', express.json(), (req, res) => {
     .then((noteId) => {
 
       // FIXME get full url
-      res.location(`/notes/${noteId}`);
+      res.location(`${req.originalUrl}/notes/${noteId}`);
       res.status(200).json(noteId);
     })
     .catch((err) => {
 
-      // TODO 4xx error
+      // TODO handle various boom errors from model
 
       res.status(500).json(err);
     });
@@ -50,6 +50,8 @@ router.get('/:noteId', (req, res) => {
     })
     .catch((err) => {
 
+      // TODO handle various boom errors from model
+
       res.status(500).json(err);
     });
 });
@@ -65,7 +67,7 @@ router.patch('/:noteId', express.json(), (req, res) => {
     })
     .catch((err) => {
 
-      // TODO 4xx error
+      // TODO handle various boom errors from model
 
       res.status(500).json(err);
     });
@@ -82,7 +84,7 @@ router.put('/:noteId', express.json(), (req, res) => {
     })
     .catch((err) => {
 
-      // TODO 4xx error
+      // TODO handle various boom errors from model
 
       res.status(500).json(err);
     });
@@ -98,6 +100,8 @@ router.delete('/:noteId', (req, res) => {
       res.status(204).json();
     })
     .catch((err) => {
+
+      // TODO handle various boom errors from model
 
       res.status(500).json(err);
     });
