@@ -32,6 +32,7 @@ const checkAuth = function (req, res, next) {
   // If no Authorization header
   if (!authorization) {
     next();
+    return;
   }
 
   const token = authorization.slice(7);

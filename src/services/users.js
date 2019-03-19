@@ -63,7 +63,7 @@ const deleteUser = function (db, userId) {
     .where('id', userId);
 };
 
-const validateCredentials = function (username, password) {
+const validateCredentials = function (db, username, password) {
 
   return db
     .select('*')
