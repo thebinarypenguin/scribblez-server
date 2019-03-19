@@ -1,4 +1,5 @@
 const express = require('express');
+const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -9,7 +10,9 @@ router.post('/login', express.json(), (req, res) => {
 });
 
 // Exchange a stale token for a fresh token
-router.get(requireAuth, '/refresh', (req, res) => {
+router.get('/refresh', requireAuth, (req, res) => {
 
   res.status(501).json();
 });
+
+module.exports = router;

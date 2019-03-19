@@ -1,5 +1,6 @@
-const tokenService = require('../services/token');
-
+const configService = require('../services/config');
+const usersService  = require('../services/users');
+const tokenService  = require('../services/token');
 
 const requireAuth = function (req, res, next) {
 
@@ -14,9 +15,9 @@ const requireAuth = function (req, res, next) {
 
   // Validate token
   tokenService
-    .verifyToken(token, SECRET)
+    .verifyToken(token, configService.token_secret)
     .then((payload) => {
-      req.tokenPayload = payload;
+      req.user = usersService.getUserById(payload.userId);
       next();
     })
     .catch((err) => {
@@ -37,9 +38,9 @@ const checkAuth = function (req, res, next) {
 
   // Validate token
   tokenService
-    .verifyToken(token, SECRET)
+    .verifyToken(token, configService.token_secret)
     .then((payload) => {
-      req.tokenPayload = payload;
+      req.user = usersService.getUserById(payload.userId);
       next();
     })
     .catch((err) => {

@@ -1,4 +1,5 @@
 const express = require('express');
+const { checkAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -15,3 +16,5 @@ router.get('/:username', (req, res) => {
 
   res.status(501).json();
 });
+
+module.exports = router;
