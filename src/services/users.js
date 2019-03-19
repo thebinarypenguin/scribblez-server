@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const getAllUsers = function (db) {
 
   return db
-    .select('id, real_name', 'username', 'email_address')
+    .select('id', 'real_name', 'username', 'email_address')
     .from('users')
     .orderBy('id');
 };
@@ -11,7 +11,7 @@ const getAllUsers = function (db) {
 const getUserById = function (db, userId) {
 
   return db
-    .select('id, real_name', 'username', 'email_address')
+    .select('id', 'real_name', 'username', 'email_address')
     .from('users')
     .where('id', userId)
     .then((rows) => {
@@ -22,7 +22,7 @@ const getUserById = function (db, userId) {
 const getUserByUsername = function (db, username) {
 
   return db
-    .select('id, real_name', 'username', 'email_address')
+    .select('id', 'real_name', 'username', 'email_address')
     .from('users')
     .where('username', username)
     .then((rows) => {
