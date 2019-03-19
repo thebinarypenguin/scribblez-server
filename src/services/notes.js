@@ -8,6 +8,16 @@ const getAllNotes = function (db) {
     .orderBy('id');
 };
 
+const getUsersNotes = function (db, userId) {
+console.log(userId);
+  return db
+    .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility')
+    .from('notes')
+    .leftJoin('users', 'users.id', '=', 'notes.owner_id')
+    .where('users.id', userId)
+    .orderBy('id');
+};
+
 const getNote = function (db, noteId) {
 
   return db
@@ -55,6 +65,7 @@ const deleteNote = function (db, noteId) {
 
 module.exports = {
   getAllNotes,
+  getUsersNotes,
   getNote,
   createNote,
   updateNote,

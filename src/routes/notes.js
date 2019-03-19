@@ -10,7 +10,7 @@ router.all('*', requireAuth);
 router.get('/', (req, res) => {
 
   model
-    .getAllNotes(req.app.get('db'))
+    .getUsersNotes(req.app.get('db'), req.user.id)
     .then((notes) => {
 
       res.status(200).json(notes);
