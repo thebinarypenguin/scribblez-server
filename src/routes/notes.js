@@ -3,7 +3,7 @@ const model   = require('../services/notes');
 
 const router = express.Router();
 
-// router.all('*', requireAuth);
+router.all('*', requireAuth);
 
 // Get all Notes
 router.get('/', (req, res) => {

@@ -3,7 +3,10 @@ const morgan      = require('morgan');
 const cors        = require('cors');
 const helmet      = require('helmet');
 const config      = require('./config');
+const authRouter  = require('./routes/auth');
+const feedRouter  = require('./routes/feed');
 const notesRouter = require('./routes/notes');
+const usersRouter = require('./routes/users');
 
 const app = express();
 
@@ -20,7 +23,10 @@ app.use((err, req, res, next) => {
   res.status(500).json(err);
 });
 
+app.use('/auth',  authRouter);
+app.use('/feed',  feedRouter);
 app.use('/notes', notesRouter);
+app.use('/users', usersRouter);
 
 app.get('/', (req, res) => {
   res.send('Hi There');
