@@ -27,8 +27,8 @@ router.post('/login', express.json(), (req, res) => {
       return tokenService
         .createToken(
           { userId: user.id },
-          configService.jwt_secret,
-          { expiresIn: configService.jwt_expiry }
+          configService.token_secret,
+          { expiresIn: configService.token_expiry }
         );
     })
     .then((token) => {
