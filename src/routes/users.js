@@ -1,9 +1,9 @@
 const express = require('express');
-const { requireAuth } = require('../middleware/auth');
+const { matchingUserAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.all('*', requireAuth);
+// router.all('*', requireAuth);
 
 // Get all users
 router.get('/', (req, res) => {
@@ -18,25 +18,25 @@ router.post('/', express.json(), (req, res) => {
 });
 
 // Get existing user
-router.get('/:username', (req, res) => {
+router.get('/:username', matchingUserAuth, (req, res) => {
 
-  res.status(501).json();
+  res.status(200).json(req.user);
 });
 
 // Update existing user
-router.patch('/:username', express.json(), (req, res) => {
+router.patch('/:username', matchingUserAuth, express.json(), (req, res) => {
 
   res.status(501).json();
 });
 
 // Replace exiting user
-router.put('/:username', express.json(), (req, res) => {
+router.put('/:username', matchingUserAuth, express.json(), (req, res) => {
 
   res.status(501).json();
 });
 
 // Delete exiting user
-router.delete('/:username', (req, res) => {
+router.delete('/:username', matchingUserAuth, (req, res) => {
 
   res.status(501).json();
 });
