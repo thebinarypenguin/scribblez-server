@@ -1,24 +1,14 @@
-
-const getAllNotes = function (db) {
+const getByOwner = function (db, userId) {
 
   return db
     .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility')
     .from('notes')
     .leftJoin('users', 'users.id', '=', 'notes.owner_id')
+    .where('notes.owner_id', userId)
     .orderBy('id');
 };
 
-const getUsersNotes = function (db, userId) {
-console.log(userId);
-  return db
-    .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility')
-    .from('notes')
-    .leftJoin('users', 'users.id', '=', 'notes.owner_id')
-    .where('users.id', userId)
-    .orderBy('id');
-};
-
-const getNote = function (db, noteId) {
+const getById = function (db, noteId) {
 
   return db
     .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility')
@@ -63,12 +53,26 @@ const deleteNote = function (db, noteId) {
     .where('id', noteId);
 };
 
+const verifyUserOwnsNote = function (db, userId, noteId) {
+
+  return db
+    .select('id')
+    .from('notes')
+    .where('owner_id', userId)
+    .andWhere('id', noteId)
+    .then((rows) => {
+      if (rows.length === 0) {
+        throw new Error('User does not own note');
+      }
+    });
+};
+
 module.exports = {
-  getAllNotes,
-  getUsersNotes,
-  getNote,
+  getByOwner,
+  getById,
   createNote,
   updateNote,
   replaceNote,
   deleteNote,
+  verifyUserOwnsNote,
 };

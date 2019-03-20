@@ -1,15 +1,24 @@
 const express = require('express');
-const { matchingUserAuth } = require('../middleware/auth');
+const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
-// router.all('*', requireAuth);
+const verifyPermission = function (req, res, next) {
 
-// Get all users
-router.get('/', (req, res) => {
+  if (req.user.username !== req.params.username) {
+    return res.status(400).json({ error: 'Permission denied' });
+  }
 
-  res.status(501).json();
-});
+  next();
+};
+
+router.all('*', requireAuth);
+
+// // Get all users
+// router.get('/', (req, res) => {
+
+//   res.status(501).json();
+// });
 
 // Create new user
 router.post('/', express.json(), (req, res) => {
@@ -18,25 +27,25 @@ router.post('/', express.json(), (req, res) => {
 });
 
 // Get existing user
-router.get('/:username', matchingUserAuth, (req, res) => {
+router.get('/:username', verifyPermission, (req, res) => {
 
   res.status(200).json(req.user);
 });
 
 // Update existing user
-router.patch('/:username', matchingUserAuth, express.json(), (req, res) => {
+router.patch('/:username', verifyPermission, express.json(), (req, res) => {
 
   res.status(501).json();
 });
 
 // Replace exiting user
-router.put('/:username', matchingUserAuth, express.json(), (req, res) => {
+router.put('/:username', verifyPermission, express.json(), (req, res) => {
 
   res.status(501).json();
 });
 
 // Delete exiting user
-router.delete('/:username', matchingUserAuth, (req, res) => {
+router.delete('/:username', verifyPermission, (req, res) => {
 
   res.status(501).json();
 });

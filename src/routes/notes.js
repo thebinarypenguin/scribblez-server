@@ -4,13 +4,29 @@ const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
+const verifyOwnership = function (req, res, next) {
+
+  const db     = req.app.get('db');
+  const userId = req.user.id;
+  const noteId = req.params.noteId;
+
+  model
+    .verifyUserOwnsNote(db, userId, noteId)
+    .then(() => {
+      next();
+    })
+    .catch((err) => {
+      return res.status(400).json({ error: 'permission denied' });
+    });
+};
+
 router.all('*', requireAuth);
 
 // Get all Notes
 router.get('/', (req, res) => {
 
   model
-    .getUsersNotes(req.app.get('db'), req.user.id)
+    .getByOwner(req.app.get('db'), req.user.id)
     .then((notes) => {
 
       res.status(200).json(notes);
@@ -39,10 +55,10 @@ router.post('/', express.json(), (req, res) => {
 });
 
 // Get existing note
-router.get('/:noteId', (req, res) => {
+router.get('/:noteId', verifyOwnership, (req, res) => {
 
   model
-    .getNote(req.app.get('db'), req.params.noteId)
+    .getById(req.app.get('db'), req.params.noteId)
     .then((notes) => {
 
       res.status(200).json(notes);
@@ -54,7 +70,7 @@ router.get('/:noteId', (req, res) => {
 });
 
 // Update existing note
-router.patch('/:noteId', express.json(), (req, res) => {
+router.patch('/:noteId', verifyOwnership, express.json(), (req, res) => {
 
   model
     .updateNote(req.app.get('db'), req.params.noteId, req.body)
@@ -69,7 +85,7 @@ router.patch('/:noteId', express.json(), (req, res) => {
 });
 
 // Replace exiting note
-router.put('/:noteId', express.json(), (req, res) => {
+router.put('/:noteId', verifyOwnership, express.json(), (req, res) => {
 
   model
     .replaceNote(req.app.get('db'), req.params.noteId, req.body)
@@ -84,7 +100,7 @@ router.put('/:noteId', express.json(), (req, res) => {
 });
 
 // Delete exiting note
-router.delete('/:noteId', (req, res) => {
+router.delete('/:noteId', verifyOwnership, (req, res) => {
 
   model
     .deleteNote(req.app.get('db'), req.params.noteId)

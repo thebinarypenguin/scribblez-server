@@ -1,13 +1,5 @@
 const bcrypt = require('bcryptjs');
 
-const getAllUsers = function (db) {
-
-  return db
-    .select('id', 'real_name', 'username', 'email_address')
-    .from('users')
-    .orderBy('id');
-};
-
 const getUserById = function (db, userId) {
 
   return db
@@ -101,7 +93,6 @@ const validateCredentials = function (db, username, password) {
 };
 
 module.exports = {
-  getAllUsers,
   getUserById,
   getUserByUsername,
   createUser,

@@ -1,10 +1,7 @@
 const express = require('express');
-const { checkAuth } = require('../middleware/auth');
 const feedService = require('../services/feed');
 
 const router = express.Router();
-
-router.all('*', checkAuth);
 
 // Get all feed items
 router.get('/', (req, res) => {
