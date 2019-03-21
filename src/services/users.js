@@ -24,8 +24,16 @@ const getUserByUsername = function (db, username) {
 
 const createUser = function (db, createPayload) {
 
+  // FIXME
+  const test = {
+    real_name: createPayload.real_name,
+    email_address: 'a@b.c',
+    username: createPayload.username,
+    password_hash: '$2a$10$rwr7dpsiMVg6YfJy5a/TX.FqLra/Mci2wMsHnsz23G5VoS798e9Ty',
+  };
+
   return db
-    .insert(createPayload)
+    .insert(test)
     .into('users')
     .returning('id')
     .then((ids) => {

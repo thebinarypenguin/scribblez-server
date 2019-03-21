@@ -40,8 +40,14 @@ router.get('/', (req, res) => {
 // Create new note
 router.post('/', express.json(), (req, res) => {
 
+  const payload = {
+    owner_id   : req.user.id,
+    body       : req.body.body,
+    visibility : req.body.visibility,
+  };
+
   model
-    .createNote(req.app.get('db'), req.body)
+    .createNote(req.app.get('db'), payload)
     .then((noteId) => {
 
       // FIXME get full url

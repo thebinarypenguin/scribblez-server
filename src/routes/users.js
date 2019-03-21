@@ -1,5 +1,6 @@
 const express = require('express');
 const { requireAuth } = require('../middleware/auth');
+const UsersService = require('../services/users');
 
 const router = express.Router();
 
@@ -12,7 +13,7 @@ const verifyPermission = function (req, res, next) {
   next();
 };
 
-router.all('*', requireAuth);
+// router.all('*', requireAuth);
 
 // // Get all users
 // router.get('/', (req, res) => {
@@ -23,29 +24,33 @@ router.all('*', requireAuth);
 // Create new user
 router.post('/', express.json(), (req, res) => {
 
-  res.status(501).json();
+  UsersService
+    .createUser(req.app.get('db'), req.body)
+    .then((id) => {
+      res.status(201).json(id);
+    });
 });
 
 // Get existing user
-router.get('/:username', verifyPermission, (req, res) => {
+router.get('/:username', requireAuth, verifyPermission, (req, res) => {
 
   res.status(200).json(req.user);
 });
 
 // Update existing user
-router.patch('/:username', verifyPermission, express.json(), (req, res) => {
+router.patch('/:username', requireAuth, verifyPermission, express.json(), (req, res) => {
 
   res.status(501).json();
 });
 
 // Replace exiting user
-router.put('/:username', verifyPermission, express.json(), (req, res) => {
+router.put('/:username', requireAuth, verifyPermission, express.json(), (req, res) => {
 
   res.status(501).json();
 });
 
 // Delete exiting user
-router.delete('/:username', verifyPermission, (req, res) => {
+router.delete('/:username', requireAuth, verifyPermission, (req, res) => {
 
   res.status(501).json();
 });
