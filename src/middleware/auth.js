@@ -19,7 +19,7 @@ const requireAuth = function (req, res, next) {
     .then((payload) => {
 
       return usersService
-        .getUserById(req.app.get('db'), payload.userId)
+        .getUserByUsername(req.app.get('db'), payload.username)
         .then((user) => {
           req.user = user;
           next();
