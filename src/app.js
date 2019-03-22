@@ -11,7 +11,7 @@ const usersRouter = require('./routes/users');
 const app = express();
 
 app.use(morgan('dev'));
-app.use(cors());
+app.use(cors({ origin: config.client_origin }));
 app.use(helmet());
 
 app.use((err, req, res, next) => {
