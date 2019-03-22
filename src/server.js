@@ -5,7 +5,7 @@ const pkg    = require('../package.json');
 
 const db = knex({
   client: 'pg',
-  connection: config.db_string,
+  connection: config.db_url,
 });
 
 app.set('db', db);
