@@ -6,7 +6,7 @@ const getGlobalFeed = function (db) {
     .from('notes')
     .leftJoin('users', 'users.id', '=', 'notes.owner_id')
     .where('visibility', 'public')
-    .orderBy('id');
+    .orderBy('notes.updated_at', 'DESC');
 };
 
 const getUserFeed = function (db, username) {
@@ -17,7 +17,7 @@ const getUserFeed = function (db, username) {
     .leftJoin('users', 'users.id', '=', 'notes.owner_id')
     .where('visibility', 'public')
     .andWhere('users.username', username)
-    .orderBy('id');
+    .orderBy('notes.updated_at', 'DESC');
 };
 
 module.exports = {

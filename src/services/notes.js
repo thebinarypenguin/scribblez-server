@@ -5,6 +5,7 @@ const getByOwner = function (db, userId) {
     .from('notes')
     .leftJoin('users', 'users.id', '=', 'notes.owner_id')
     .where('notes.owner_id', userId)
+    .orderBy('notes.updated_at', 'DESC')
     .orderBy('id');
 };
 
@@ -15,6 +16,7 @@ const getById = function (db, noteId) {
     .from('notes')
     .leftJoin('users', 'users.id', '=', 'notes.owner_id')
     .where('notes.id', noteId)
+    .orderBy('notes.updated_at', 'DESC')
     .then((rows) => {
       return rows[0];
     });
