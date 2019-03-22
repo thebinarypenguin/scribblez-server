@@ -2,7 +2,7 @@
 const getGlobalFeed = function (db) {
 
   return db
-    .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility')
+    .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility', 'notes.created_at', 'notes.updated_at')
     .from('notes')
     .leftJoin('users', 'users.id', '=', 'notes.owner_id')
     .where('visibility', 'public')
@@ -12,7 +12,7 @@ const getGlobalFeed = function (db) {
 const getUserFeed = function (db, username) {
 
   return db
-    .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility')
+    .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility', 'notes.created_at', 'notes.updated_at')
     .from('notes')
     .leftJoin('users', 'users.id', '=', 'notes.owner_id')
     .where('visibility', 'public')

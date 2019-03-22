@@ -1,7 +1,7 @@
 const getByOwner = function (db, userId) {
 
   return db
-    .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility')
+    .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility', 'notes.created_at', 'notes.updated_at')
     .from('notes')
     .leftJoin('users', 'users.id', '=', 'notes.owner_id')
     .where('notes.owner_id', userId)
@@ -11,7 +11,7 @@ const getByOwner = function (db, userId) {
 const getById = function (db, noteId) {
 
   return db
-    .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility')
+    .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility', 'notes.created_at', 'notes.updated_at')
     .from('notes')
     .leftJoin('users', 'users.id', '=', 'notes.owner_id')
     .where('notes.id', noteId)
