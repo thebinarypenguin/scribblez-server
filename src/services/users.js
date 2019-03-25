@@ -24,20 +24,25 @@ const getUserByUsername = function (db, username) {
 
 const createUser = function (db, createPayload) {
 
-  // FIXME
-  const test = {
-    real_name: createPayload.real_name,
-    email_address: 'a@b.c',
-    username: createPayload.username,
-    password_hash: '$2a$10$rwr7dpsiMVg6YfJy5a/TX.FqLra/Mci2wMsHnsz23G5VoS798e9Ty',
-  };
+  return bcrypt.hash(createPayload.password, 10)
+    .then((hash) => {
 
-  return db
-    .insert(test)
-    .into('users')
-    .returning('id')
-    .then((ids) => {
-      return ids[0];
+      return {
+        real_name     : createPayload.real_name,
+        email_address : createPayload.email_address,
+        username      : createPayload.username,
+        password_hash : hash,
+      };
+    })
+    .then((payload) => {
+
+      return db
+        .insert(payload)
+        .into('users')
+        .returning('id')
+        .then((ids) => {
+          return ids[0];
+        });
     });
 };
 
@@ -92,7 +97,7 @@ const validateCredentials = function (db, username, password) {
 
       // redact sensitive info
       return {
-        id            : user.id,
+        // id            : user.id,
         real_name     : user.real_name,
         username      : user.username,
         email_address : user.email_address,
