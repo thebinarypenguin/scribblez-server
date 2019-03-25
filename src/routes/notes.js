@@ -50,8 +50,7 @@ router.post('/', express.json(), (req, res) => {
     .createNote(req.app.get('db'), payload)
     .then((noteId) => {
 
-      // FIXME get full url
-      res.location(`${req.originalUrl}/notes/${noteId}`);
+      // res.location(`${req.protocol}://${req.hostname}/notes/${noteId}`);
       res.status(200).json(noteId);
     })
     .catch((err) => {
