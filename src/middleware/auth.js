@@ -8,7 +8,7 @@ const requireAuth = function (req, res, next) {
 
   // If no Authorization header
   if (!authorization) {
-    return res.status(401).json({ error: 'authorization not provided' });
+    return res.status(401).json({ error: 'Authorization not provided' });
   }
 
   const token = authorization.slice(7);
@@ -29,7 +29,7 @@ const requireAuth = function (req, res, next) {
         });
     })
     .catch((err) => {
-      return res.status(401).json({ error: 'invalid authorization' });
+      return res.status(401).json({ error: 'Invalid authorization' });
     });
 };
 

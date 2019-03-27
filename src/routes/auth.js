@@ -7,16 +7,16 @@ const usersService  = require('../services/users');
 const router = express.Router();
 
 // Exchange username,password for a token
-router.post('/login', express.json(), (req, res) => {
+router.post('/login', express.json(), (req, res, next) => {
 
   const { username, password } = req.body;
 
   if (!username) {
-    return res.status(400).json({ error: 'username not provided' });
+    return res.status(400).json({ error: 'Username not provided' });
   }
 
   if (!password) {
-    return res.status(400).json({ error: 'password not provided' });
+    return res.status(400).json({ error: 'Password not provided' });
   }
 
   // validate credentials
@@ -35,12 +35,17 @@ router.post('/login', express.json(), (req, res) => {
       res.status(200).json({ token: token });
     })
     .catch((err) => {
-      res.status(500).json(err);
+
+      if (err.message === 'Invalid username or password') {
+        return res.status(400).json({ error:  'Invalid username or password' });
+      }
+
+      next(err);
     });
 });
 
 // Exchange a stale token for a fresh token
-router.get('/refresh', requireAuth, (req, res) => {
+router.get('/refresh', requireAuth, (req, res, next) => {
 
   return tokenService
     .createToken(
@@ -51,9 +56,7 @@ router.get('/refresh', requireAuth, (req, res) => {
     .then((token) => {
       res.status(200).json({ token: token });
     })
-    .catch((err) => {
-      res.status(500).json({ error: 'error creating token' });
-    });
+    .catch(next);
 });
 
 module.exports = router;

@@ -16,14 +16,14 @@ const verifyOwnership = function (req, res, next) {
       next();
     })
     .catch((err) => {
-      return res.status(400).json({ error: 'permission denied' });
+      return res.status(400).json({ error: 'Permission denied' });
     });
 };
 
 router.all('*', requireAuth);
 
 // Get all Notes
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
 
   model
     .getByOwner(req.app.get('db'), req.user.id)
@@ -31,14 +31,11 @@ router.get('/', (req, res) => {
 
       res.status(200).json(notes);
     })
-    .catch((err) => {
-
-      res.status(500).json(err);
-    });
+    .catch(next);
 });
 
 // Create new note
-router.post('/', express.json(), (req, res) => {
+router.post('/', express.json(), (req, res, next) => {
 
   const payload = {
     owner_id   : req.user.id,
@@ -51,16 +48,13 @@ router.post('/', express.json(), (req, res) => {
     .then((noteId) => {
 
       // res.location(`${req.protocol}://${req.hostname}/notes/${noteId}`);
-      res.status(200).json(noteId);
+      res.status(200).json();
     })
-    .catch((err) => {
-
-      res.status(500).json(err);
-    });
+    .catch(next);
 });
 
 // Get existing note
-router.get('/:noteId', verifyOwnership, (req, res) => {
+router.get('/:noteId', verifyOwnership, (req, res, next) => {
 
   model
     .getById(req.app.get('db'), req.params.noteId)
@@ -68,14 +62,11 @@ router.get('/:noteId', verifyOwnership, (req, res) => {
 
       res.status(200).json(notes);
     })
-    .catch((err) => {
-
-      res.status(500).json(err);
-    });
+    .catch(next);
 });
 
 // Update existing note
-router.patch('/:noteId', verifyOwnership, express.json(), (req, res) => {
+router.patch('/:noteId', verifyOwnership, express.json(), (req, res, next) => {
 
   model
     .updateNote(req.app.get('db'), req.params.noteId, req.body)
@@ -83,14 +74,11 @@ router.patch('/:noteId', verifyOwnership, express.json(), (req, res) => {
 
       res.status(204).json();
     })
-    .catch((err) => {
-
-      res.status(500).json(err);
-    });
+    .catch(next);
 });
 
 // Delete exiting note
-router.delete('/:noteId', verifyOwnership, (req, res) => {
+router.delete('/:noteId', verifyOwnership, (req, res, next) => {
 
   model
     .deleteNote(req.app.get('db'), req.params.noteId)
@@ -98,10 +86,7 @@ router.delete('/:noteId', verifyOwnership, (req, res) => {
 
       res.status(204).json();
     })
-    .catch((err) => {
-
-      res.status(500).json(err);
-    });
+    .catch(next);
 });
 
 module.exports = router;

@@ -19,7 +19,7 @@ router.post('/', express.json(), (req, res) => {
   UsersService
     .createUser(req.app.get('db'), req.body)
     .then((id) => {
-      res.status(201).json(id);
+      res.status(201).json();
     });
 });
 
