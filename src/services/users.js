@@ -1,17 +1,8 @@
 const bcrypt = require('bcryptjs');
 
-const getUserById = function (db, userId) {
-
-  return db
-    .select('id', 'real_name', 'username', 'email_address')
-    .from('users')
-    .where('id', userId)
-    .then((rows) => {
-      return rows[0];
-    });
-};
-
 const getUserByUsername = function (db, username) {
+
+  // TODO validate username
 
   return db
     .select('id', 'real_name', 'username', 'email_address')
@@ -23,6 +14,8 @@ const getUserByUsername = function (db, username) {
 };
 
 const createUser = function (db, createPayload) {
+
+  // TODO validate createPayload
 
   return bcrypt.hash(createPayload.password, 10)
     .then((hash) => {
@@ -48,19 +41,17 @@ const createUser = function (db, createPayload) {
 
 const updateUser = function (db, userId, updatePayload) {
 
+  // TODO validate userId
+  // TODO validate updatePayload
+
   return db('users')
     .update(updatePayload)
     .where('id', userId);
 };
 
-const replaceUser = function (db, userId, replacePayload) {
-
-  return db('users')
-    .update(replacePayload)
-    .where('id', userId);
-};
-
 const deleteUser = function (db, userId) {
+
+  // TODO validate userId
 
   return db
     .delete()
@@ -70,6 +61,10 @@ const deleteUser = function (db, userId) {
 
 const validateCredentials = function (db, username, password) {
 
+  // TODO validate username
+  // TODO validate password
+
+  // Check if user exists
   return db
     .select('*')
     .from('users')
@@ -84,6 +79,7 @@ const validateCredentials = function (db, username, password) {
     })
     .then((user) => {
 
+      // Compare passwords
       return bcrypt
         .compare(password, user.password_hash)
         .then(() => {
@@ -95,9 +91,8 @@ const validateCredentials = function (db, username, password) {
     })
     .then((user) => {
 
-      // redact sensitive info
+      // Redact sensitive info
       return {
-        // id            : user.id,
         real_name     : user.real_name,
         username      : user.username,
         email_address : user.email_address,
@@ -106,11 +101,9 @@ const validateCredentials = function (db, username, password) {
 };
 
 module.exports = {
-  getUserById,
   getUserByUsername,
   createUser,
   updateUser,
-  replaceUser,
   deleteUser,
   validateCredentials,
 };

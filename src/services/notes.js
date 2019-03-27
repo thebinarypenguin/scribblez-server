@@ -1,5 +1,7 @@
 const getByOwner = function (db, userId) {
 
+  // TODO validate userId
+
   return db
     .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility', 'notes.created_at', 'notes.updated_at')
     .from('notes')
@@ -10,6 +12,8 @@ const getByOwner = function (db, userId) {
 };
 
 const getById = function (db, noteId) {
+
+  // TODO validate noteId
 
   return db
     .select('notes.id', 'users.username AS owner', 'notes.body', 'notes.visibility', 'notes.created_at', 'notes.updated_at')
@@ -24,6 +28,8 @@ const getById = function (db, noteId) {
 
 const createNote = function (db, createPayload) {
 
+// TODO validate createPayload
+
   return db
     .insert(createPayload)
     .into('notes')
@@ -35,19 +41,17 @@ const createNote = function (db, createPayload) {
 
 const updateNote = function (db, noteId, updatePayload) {
 
+  // TODO validate noteId
+  // TODO validate updatePayload
+
   return db('notes')
     .update(updatePayload)
     .where('id', noteId);
 };
 
-const replaceNote = function (db, noteId, replacePayload) {
-
-  return db('notes')
-    .update(replacePayload)
-    .where('id', noteId);
-};
-
 const deleteNote = function (db, noteId) {
+
+  // TODO validate noteId
 
   return db
     .delete()
@@ -56,6 +60,9 @@ const deleteNote = function (db, noteId) {
 };
 
 const verifyUserOwnsNote = function (db, userId, noteId) {
+
+  // TODO validate userId
+  // TODO validate noteId
 
   return db
     .select('id')
@@ -74,7 +81,6 @@ module.exports = {
   getById,
   createNote,
   updateNote,
-  replaceNote,
   deleteNote,
   verifyUserOwnsNote,
 };
