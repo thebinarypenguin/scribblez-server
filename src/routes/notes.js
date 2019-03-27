@@ -89,21 +89,6 @@ router.patch('/:noteId', verifyOwnership, express.json(), (req, res) => {
     });
 });
 
-// Replace exiting note
-router.put('/:noteId', verifyOwnership, express.json(), (req, res) => {
-
-  model
-    .replaceNote(req.app.get('db'), req.params.noteId, req.body)
-    .then(() => {
-
-      res.status(204).json();
-    })
-    .catch((err) => {
-
-      res.status(500).json(err);
-    });
-});
-
 // Delete exiting note
 router.delete('/:noteId', verifyOwnership, (req, res) => {
 

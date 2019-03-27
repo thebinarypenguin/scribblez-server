@@ -13,14 +13,6 @@ const verifyPermission = function (req, res, next) {
   next();
 };
 
-// router.all('*', requireAuth);
-
-// // Get all users
-// router.get('/', (req, res) => {
-
-//   res.status(501).json();
-// });
-
 // Create new user
 router.post('/', express.json(), (req, res) => {
 
@@ -39,12 +31,6 @@ router.get('/:username', requireAuth, verifyPermission, (req, res) => {
 
 // Update existing user
 router.patch('/:username', requireAuth, verifyPermission, express.json(), (req, res) => {
-
-  res.status(501).json();
-});
-
-// Replace exiting user
-router.put('/:username', requireAuth, verifyPermission, express.json(), (req, res) => {
 
   res.status(501).json();
 });
