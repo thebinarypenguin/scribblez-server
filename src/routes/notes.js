@@ -37,6 +37,10 @@ router.get('/', (req, res, next) => {
 // Create new note
 router.post('/', express.json(), (req, res, next) => {
 
+  if (!req.body.body || !req.body.visibility) {
+    return res.status(400).json({ error: 'Invalid body' });
+  }
+
   const payload = {
     owner_id   : req.user.id,
     body       : req.body.body,
@@ -48,7 +52,7 @@ router.post('/', express.json(), (req, res, next) => {
     .then((noteId) => {
 
       // res.location(`${req.protocol}://${req.hostname}/notes/${noteId}`);
-      res.status(200).json();
+      res.status(201).json();
     })
     .catch(next);
 });
@@ -67,6 +71,10 @@ router.get('/:noteId', verifyOwnership, (req, res, next) => {
 
 // Update existing note
 router.patch('/:noteId', verifyOwnership, express.json(), (req, res, next) => {
+
+  if (!req.body.body || !req.body.visibility) {
+    return res.status(400).json({ error: 'Invalid body' });
+  }
 
   model
     .updateNote(req.app.get('db'), req.params.noteId, req.body)

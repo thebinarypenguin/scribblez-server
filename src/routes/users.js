@@ -14,13 +14,18 @@ const verifyPermission = function (req, res, next) {
 };
 
 // Create new user
-router.post('/', express.json(), (req, res) => {
+router.post('/', express.json(), (req, res, next) => {
+
+  if (!req.body.real_name || !req.body.email_address || !req.body.username || !req.body.password) {
+    return res.status(400).json({ error: 'Invalid body' });
+  }
 
   UsersService
     .createUser(req.app.get('db'), req.body)
     .then((id) => {
       res.status(201).json();
-    });
+    })
+    .catch(next);
 });
 
 // Get existing user

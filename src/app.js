@@ -1,8 +1,8 @@
 const express      = require('express');
-const morgan       = require('morgan');
 const cors         = require('cors');
 const helmet       = require('helmet');
 const config       = require('./services/config');
+const logging      = require('./middleware/logging');
 const errorHandler = require('./middleware/errorHandler');
 const authRouter   = require('./routes/auth');
 const feedRouter   = require('./routes/feed');
@@ -11,10 +11,10 @@ const usersRouter  = require('./routes/users');
 
 const app = express();
 
-app.use(morgan('dev'));
+app.use(errorHandler);
+app.use(logging);
 app.use(cors({ origin: config.client_origin }));
 app.use(helmet());
-app.use(errorHandler);
 
 app.use('/auth',  authRouter);
 app.use('/feed',  feedRouter);
